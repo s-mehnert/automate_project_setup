@@ -1,64 +1,31 @@
-# automate the following project setup procedure
-
-# DONE >> mkdir new_project					    # creates new project folder
-# N/A  >> cd new_project					    # changes into new project folder
-# DONE >> touch new_project.py				    # creates new python file
-# DONE >> touch README.md					    # creates Markdown Readme file	
-# DONE >> touch TODO.txt					    # creates TODO file
-# >> python -m venv venv --prompt new-venv		# creates virtual environment called venv with a display name of new-venv
-# >> source venv/Scripts/activate				# activates virtual environment
-# DONE >> touch .gitignore					    # creates .gitignore file: files and directories specified in here will be ignored by git
-# DONE >> echo __pycache__ >> .gitignore		# adds __pycache__ to .gitignore
-# DONE >> echo venv/ >> .gitignore				# adds venv/ to .gitignore
-# DONE >> echo TODO.txt >> .gitignore			# adds TODO.txt to .gitignore
-# DONE >> git init						        # initializes git for the project
-# DONE >> git add --all					        # adds .gitignore to the staging area
-# DONE >> git commit -m "setup project"			# commits the changes
-
-# --> create same project on github and follow instructions to push existing repo from command line
-
-
 # import os module for interaction with the computer's operating system
 
 import os, sys, subprocess
 
-p_name = sys.argv[1]  # TODO: add try except block
-p_path = "./" + p_name
+# --- HELPER FUNCTIONS --- 
 
 # Create project directory
 
-try:
-    os.mkdir(p_path)
-    print(f"\nCreating folder {p_name} ... Path: {p_path}\n")
-except FileExistsError:
-    print(f"\nFolder already exists: {p_path} --> Execution aborted.\nRe-run script with a different project name.\n")
-except OSError:
-    print(f"\nInvalid file name: {p_name} --> Execution aborted.\nRe-run script with a different project name not including any of the characters ---'\\/:*?<>|' or a space character")
+
+def create_project_dir(name, path):
+    try:
+        os.mkdir(path)
+        print(f"\nCreating folder {name} ... Path: {path}\n")
+    except FileExistsError:
+        print(f"\nFolder already exists: {path} --> Execution aborted.\nRe-run script with a different project name.\n")
+    except OSError:
+        print(f"\nInvalid file name: {name} --> Execution aborted.\nRe-run script with a different project name not including any of the characters ---'\\/:*?<>|' or a space character")
 
 # create files
 
-files_tbc = [
-    {"name": "TODO.txt", "content": ""},
-    {"name": "README.md", "content": ""},
-    {"name": p_name + ".py", "content": ""},
-    {"name": ".gitignore", "content": "__pycache__\nTODO.txt\n/venv\n"}
-]
 
-# print(files_tbc)
-
-for file in files_tbc:
-    f_path = p_path + "/" + file["name"]
-    fd = os.open(f_path, os.O_RDWR|os.O_CREAT)  # creates and opens file
-    fo = os.fdopen(fd, "w+")  # gets a file object for the file
-    fo.write(file["content"])  # writes something on open file
-    fo.close()  # closes file
-
-
-# change directory
-
-
-
-os.chdir(p_name)
+def create_files(files, path):
+    for file in files:
+        f_path = path + "/" + file["name"]
+        fd = os.open(f_path, os.O_RDWR|os.O_CREAT)  # creates and opens file
+        fo = os.fdopen(fd, "w+")  # gets a file object for the file
+        fo.write(file["content"])  # writes something in open file
+        fo.close()  # closes file
 
 # setup git repo, add files and make first commit
 
@@ -69,11 +36,69 @@ def git_init_first_commit():
     subprocess.run(["git", "commit", "-m", '"set up project files and folders"'])
 
 
-try:
-    git = sys.argv[2]
-except:
-    git = input("\nInitialize git repository? (y) --> ")
+# create virtual environment
 
-if git in ["git", "y", "yes"]:
-    git_init_first_commit()
+def create_venv_name(p_name):
+    v_name = ""
+    splitter = ""
+    if "_" in p_name:
+        splitter = "_"
+    elif "-" in p_name:
+        splitter = "-"
+    if splitter:
+        p_name_list = p_name.split(splitter)
+        for word in p_name_list:
+            v_name += word[0].upper()
+    else:
+        v_name = p_name[:5]
+    approved = input(f"\nPrompt name of venv is set to {v_name}. To change it enter new name --> ")
+    if approved:
+        v_name = approved
+    return v_name
 
+
+def create_venv(v_name):
+    subprocess.run(["python", "-m", "venv", "venv", "--prompt", v_name])
+
+
+# --- MAIN ---
+
+
+def main():
+    try:
+        p_name = sys.argv[1]
+    except:
+        p_name = input("\nEnter project name --> ")
+    p_path = "./" + p_name
+    files_tbc = [
+        {"name": "TODO.txt", "content": ""},
+        {"name": "README.md", "content": ""},
+        {"name": p_name + ".py", "content": ""},
+        {"name": ".gitignore", "content": "__pycache__\nTODO.txt\n/venv\n"}
+]
+    create_project_dir(p_name, p_path)
+    create_files(files_tbc, p_path)
+    os.chdir(p_name)  # changes the directory
+
+    try:
+        git = sys.argv[2]
+    except:
+        git = input("\nInitialize git repository? (y) --> ")
+
+    if git in ["git", "y", "yes"]:
+        git_init_first_commit()
+        print("\n--- To make repo available remotely create same project on GitHub and follow instructions to push existing repo from command line ---")
+
+    try:
+        venv = sys.argv[3]
+    except:
+        venv = input("\nCreate virtual environment? (y) --> ")
+
+    if venv in ["venv", "y", "yes"]:
+        print("\nSetting up the virtual environment will take a moment. Please wait ...\n")
+        v_name = create_venv_name(p_name)
+        create_venv(v_name)
+
+
+if __name__ == "__main__":
+    main()
