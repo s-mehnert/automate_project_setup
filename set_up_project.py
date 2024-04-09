@@ -3,7 +3,7 @@ import os, sys, subprocess
 # --- HELPER FUNCTIONS ---
 
 
-def create_project_dir(name, path):
+def create_project_dir(name: str, path: str):
     """Create project directory."""
     try:
         os.mkdir(path)
@@ -14,7 +14,7 @@ def create_project_dir(name, path):
         print(f"\nInvalid file name: {name} --> Execution aborted.\nRe-run script with a different project name not including any of the characters ---'\\/:*?<>|' or a space character")
 
 
-def create_files(files, path):
+def create_files(files: list, path: str):
     """Create project's files from file list."""
     for file in files:
         f_path = path + "/" + file["name"]
@@ -31,7 +31,7 @@ def git_init_first_commit():
     subprocess.run(["git", "commit", "-m", '"set up project files and folders"'])
 
 
-def create_venv_name(p_name):
+def create_venv_name(p_name: str) -> str:
     """Shorten project name for venv prompt."""
     v_name = ""
     splitter = ""
@@ -51,7 +51,7 @@ def create_venv_name(p_name):
     return v_name
 
 
-def create_venv(v_name):
+def create_venv(v_name: str):
     """Create virtual environment."""
     subprocess.run(["python", "-m", "venv", "venv", "--prompt", v_name])
 
@@ -91,7 +91,7 @@ def main():
         venv = input("\nCreate virtual environment? (y) --> ")
 
     if venv in ["venv", "y", "yes"]:
-        print("\nSetting up the virtual environment will take a moment. Please wait ...\n")
+        print("\nSetting up the virtual environment will take a moment. Please wait ...")
         v_name = create_venv_name(p_name)
         create_venv(v_name)
 
