@@ -1,13 +1,10 @@
-# import os module for interaction with the computer's operating system
-
 import os, sys, subprocess
 
-# --- HELPER FUNCTIONS --- 
-
-# Create project directory
+# --- HELPER FUNCTIONS ---
 
 
 def create_project_dir(name, path):
+    """Create project directory."""
     try:
         os.mkdir(path)
         print(f"\nCreating folder {name} ... Path: {path}\n")
@@ -16,29 +13,26 @@ def create_project_dir(name, path):
     except OSError:
         print(f"\nInvalid file name: {name} --> Execution aborted.\nRe-run script with a different project name not including any of the characters ---'\\/:*?<>|' or a space character")
 
-# create files
-
 
 def create_files(files, path):
+    """Create project's files from file list."""
     for file in files:
         f_path = path + "/" + file["name"]
-        fd = os.open(f_path, os.O_RDWR|os.O_CREAT)  # creates and opens file
+        fd = os.open(f_path, os.O_RDWR | os.O_CREAT)  # creates and opens file
         fo = os.fdopen(fd, "w+")  # gets a file object for the file
         fo.write(file["content"])  # writes something in open file
         fo.close()  # closes file
 
-# setup git repo, add files and make first commit
-
 
 def git_init_first_commit():
+    """Set up git repository, stage files and make first commit."""
     subprocess.run(["git", "init"])
     subprocess.run(["git", "add", "--all"])
     subprocess.run(["git", "commit", "-m", '"set up project files and folders"'])
 
 
-# create virtual environment
-
 def create_venv_name(p_name):
+    """Shorten project name for venv prompt."""
     v_name = ""
     splitter = ""
     if "_" in p_name:
@@ -58,13 +52,15 @@ def create_venv_name(p_name):
 
 
 def create_venv(v_name):
+    """Create virtual environment."""
     subprocess.run(["python", "-m", "venv", "venv", "--prompt", v_name])
 
 
-# --- MAIN ---
-
-
 def main():
+    """
+    Use command line arguments or prompt user to create Python project folder
+    and files, a git repository and a virtual environment.
+    """
     try:
         p_name = sys.argv[1]
     except:
