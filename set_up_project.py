@@ -24,6 +24,12 @@ def create_files(files: list, path: str):
         fo.close()  # closes file
 
 
+def load_template(filename):
+    """Load sample file and return its text"""
+    with open(filename) as template:
+        return template.read()
+
+
 def git_init_first_commit():
     """Set up git repository, stage files and make first commit."""
     subprocess.run(["git", "init"])
@@ -67,8 +73,8 @@ def main():
         p_name = input("\nEnter project name --> ")
     p_path = "./" + p_name
     files_tbc = [
-        {"name": "TODO.txt", "content": ""},
-        {"name": "README.md", "content": ""},
+        {"name": "TODO.txt", "content": load_template("./templates/sample_TODO.txt")},
+        {"name": "README.md", "content": load_template("./templates/sample_readme.txt")},
         {"name": p_name + ".py", "content": ""},
         {"name": ".gitignore", "content": "__pycache__\nTODO.txt\n/venv\n"}
 ]
