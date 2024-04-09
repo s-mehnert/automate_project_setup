@@ -11,18 +11,18 @@
 # DONE >> echo __pycache__ >> .gitignore		# adds __pycache__ to .gitignore
 # DONE >> echo venv/ >> .gitignore				# adds venv/ to .gitignore
 # DONE >> echo TODO.txt >> .gitignore			# adds TODO.txt to .gitignore
-# >> git init						            # initializes git for the project
-# >> git add --all					            # adds .gitignore to the staging area
-# >> git commit -m "setup project"			    # commits the changes
+# DONE >> git init						        # initializes git for the project
+# DONE >> git add --all					        # adds .gitignore to the staging area
+# DONE >> git commit -m "setup project"			# commits the changes
 
 # --> create same project on github and follow instructions to push existing repo from command line
 
 
 # import os module for interaction with the computer's operating system
 
-import os, sys
+import os, sys, subprocess
 
-p_name = sys.argv[1] # TODO: add try except block
+p_name = sys.argv[1]  # TODO: add try except block
 p_path = "./" + p_name
 
 # Create project directory
@@ -44,19 +44,36 @@ files_tbc = [
     {"name": ".gitignore", "content": "__pycache__\nTODO.txt\n/venv\n"}
 ]
 
-print(files_tbc)
+# print(files_tbc)
 
 for file in files_tbc:
     f_path = p_path + "/" + file["name"]
     fd = os.open(f_path, os.O_RDWR|os.O_CREAT)  # creates and opens file
     fo = os.fdopen(fd, "w+")  # gets a file object for the file
     fo.write(file["content"])  # writes something on open file
-    fo.close() # closes file
+    fo.close()  # closes file
 
-# create subfolders
 
-# venv_path = p_path + "/venv"
-# os.mkdir(venv_path)
+# change directory
 
-# Testing
+
+
+os.chdir(p_name)
+
+# setup git repo, add files and make first commit
+
+
+def git_init_first_commit():
+    subprocess.run(["git", "init"])
+    subprocess.run(["git", "add", "--all"])
+    subprocess.run(["git", "commit", "-m", '"set up project files and folders"'])
+
+
+try:
+    git = sys.argv[2]
+except:
+    git = input("\nInitialize git repository? (y) --> ")
+
+if git in ["git", "y", "yes"]:
+    git_init_first_commit()
 
