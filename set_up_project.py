@@ -40,13 +40,13 @@ def git_init_first_commit():
 def create_venv_name(p_name: str) -> str:
     """Shorten project name for venv prompt."""
     v_name = ""
-    splitter = ""
+    splitter = " "
     if "_" in p_name:
-        splitter = "_"
-    elif "-" in p_name:
-        splitter = "-"
-    if splitter:
-        p_name_list = p_name.split(splitter)
+        p_name.replace("_", splitter)
+    if "-" in p_name:
+        p_name.replace("-", splitter)
+    if splitter in p_name:
+        p_name_list = p_name.split()
         for word in p_name_list:
             v_name += word[0].upper()
     else:
