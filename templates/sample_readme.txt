@@ -1,29 +1,34 @@
-# Project Title
+# --> CHANGE --> Project Title
 
-Description of what the project accomplishes.
+--> CHANGE --> Description of what the project accomplishes.
 
 ## Installation
 
-What is needed to execute the program, maybe including hints of how to install it.
+--> CHANGE --> What is needed to execute the program, maybe including hints of how to install it.
 
-example:
+--> REVIEW --> example:
 ```bash
 pip install -r requirements.txt
 ```
 
 ## Usage
 
-How the program is intended to be used, maybe including a code snippet of how to run it.
+--> CHANGE --> How the program is intended to be used, maybe including a code snippet of how to run it.
 
-example:
+--> CHANGE --> example:
 ```bash
-python qr_code_generator.py
+python my_new_app.py
 ```
 
 ## Contributing
 
-Pull requests are welcome. For major changes, please open an issue first
+--> REVIEW --> Pull requests are welcome. For major changes, please open an issue first
 to discuss what you would like to change.
+
+
+## Attribution
+
+This project was inspired by the following --> CHANGE --> [video/article/tutorial](--> INSERT LINK) by --> CHANGE --> ***Author***.
 
 
 ## License
